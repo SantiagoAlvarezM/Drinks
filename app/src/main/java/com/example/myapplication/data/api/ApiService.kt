@@ -7,6 +7,6 @@ import retrofit2.http.Query
 
 interface ApiService {
 
-    @GET("json/v1/1/search.php")
-    suspend fun getDrink(@Query("m") name: String): Response<DrinksAPiResponse>
+    @GET("api/json/v1/1/search.php")
+    suspend fun getDrink(@Query("s") name: String): Response<DrinksAPiResponse>
 }
