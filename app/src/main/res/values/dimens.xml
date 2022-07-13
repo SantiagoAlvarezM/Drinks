@@ -1,0 +1,5 @@
+<resources>
+    <dimen name="default_margin">16dp</dimen>
+    <dimen name="default_margin_medium">8dp</dimen>
+    <dimen name="min_touchable_height">48dp</dimen>
+</resources>
