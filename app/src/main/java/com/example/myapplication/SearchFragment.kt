@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
 import android.widget.Toast
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
@@ -35,6 +36,12 @@ class SearchFragment : Fragment() {
         binding.recyclerSearch.adapter = adapter
         binding.edittextFirst.doAfterTextChanged {
             viewModel.searchDrinks(it.toString())
+        }
+        binding.edittextFirst.setOnEditorActionListener { v, actionId, event ->
+            return@setOnEditorActionListener if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                viewModel.searchDrinks(v.editableText.toString())
+                true
+            } else false
         }
         viewModel.actions.observe(viewLifecycleOwner) { actions ->
             when (actions) {
