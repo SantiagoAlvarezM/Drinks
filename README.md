@@ -15,3 +15,5 @@ On selecting the cocktail from the list show the detail screen with
 2. Image
 3. Ingredients
 4. Instruction
+
+![demo](https://user-images.githubusercontent.com/7374493/178845897-0d33d35f-9496-4e27-8f4b-f60bd7a69344.gif)
