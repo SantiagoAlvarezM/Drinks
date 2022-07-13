@@ -12,6 +12,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
+const val API_REQUEST_DELAY = 100L
+
 class DrinkViewModel : ViewModel() {
 
     private val api = DrinksApi

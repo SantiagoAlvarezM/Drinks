@@ -6,12 +6,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.Toast
-import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.myapplication.databinding.FragmentSearchBinding
 import com.example.myapplication.model.DrinksActions
+import com.example.myapplication.util.throttleLatest
 
 class SearchFragment : Fragment() {
 
@@ -23,7 +24,7 @@ class SearchFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentSearchBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -34,15 +35,20 @@ class SearchFragment : Fragment() {
             findNavController().navigate(R.id.action_SearchFragment_to_SecondFragment)
         }
         binding.recyclerSearch.adapter = adapter
-        binding.edittextFirst.doAfterTextChanged {
-            viewModel.searchDrinks(it.toString())
+
+        val request = throttleLatest<String>(API_REQUEST_DELAY, viewLifecycleOwner.lifecycleScope) {
+            val query = it.trim().lowercase()
+            if (query.isNotBlank()) {
+                viewModel.searchDrinks(query)
+            }
         }
-        binding.edittextFirst.setOnEditorActionListener { v, actionId, event ->
+        binding.edittextFirst.setOnEditorActionListener { v, actionId, _ ->
             return@setOnEditorActionListener if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                viewModel.searchDrinks(v.editableText.toString())
+                request(v.editableText.toString())
                 true
             } else false
         }
+
         viewModel.actions.observe(viewLifecycleOwner) { actions ->
             when (actions) {
                 is DrinksActions.DataLoaded -> {
